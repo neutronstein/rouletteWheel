@@ -33,11 +33,15 @@ function getColor(index, total) {
     return [Math.round(r * 255), Math.round(g * 255), Math.round(b * 255)];
 }
 
+var theObject;
+
 $.widget('javobyte.rouletteWheel', {
 
     options: {
         pointer: $('<img>').attr('src', 'img/pointer.png')[0],
         selected: function () {
+        },
+        spining: function () {
         },
         spinText: 'SPIN',
         colors: [],
@@ -51,11 +55,13 @@ $.widget('javobyte.rouletteWheel', {
         itemsToDraw: 0,
     },
 
+
     _create: function () {
         if (!this.options.items) throw 'No items provided';
 
         var canvas = this.element[0];
 
+        theObject = this;
         if (canvas.getContext) {
             this._options.ctx = canvas.getContext('2d');
 
@@ -205,7 +211,7 @@ $.widget('javobyte.rouletteWheel', {
         }
 
         ctx.fillStyle = 'black';
-        ctx.drawImage(this.options.pointer, cx - 25, cy - radius - 45, 50, 50);
+        ctx.drawImage(this.options.pointer, cx - 25, cy - radius - 35, 50, 50);
 
         if (!this.is_rotating()) {
             ctx.save();
@@ -238,6 +244,8 @@ $.widget('javobyte.rouletteWheel', {
     },
 
     spin: function () {
+
+        this.options.spining();
         this._options.rotating = true;
         this._options.spinAngleStart = Math.random() * 100 + 5 * Math.random() + 5 * Math.random() + 2 * Math.random();
         this._options.spinTime = 0;
@@ -258,5 +266,5 @@ $.widget('javobyte.rouletteWheel', {
         var keys = Object.keys(this.options.items);
         var key = keys[index];
         this.options.selected(key, this.options.items[key]);
-    }
+    } 
 });
